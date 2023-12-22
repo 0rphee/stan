@@ -14,6 +14,7 @@ module Stan.Config.Pretty
     , prettyConfigCli
 
     , configToTriples
+    , prettyConfigNoFormat
     ) where
 
 import Colourista (bold, formatWith, green, magenta, red, yellow)
@@ -90,3 +91,12 @@ prettyConfigCli = unlines . concatMap action . configToTriples
           formatWith [configActionColour act, bold] (prettyConfigAction act)
         :  [ "    " <> check | check /= ""]
         ++ [ "    " <> scope | scope /= ""]
+
+prettyConfigNoFormat :: Config -> Text
+prettyConfigNoFormat = unlines . concatMap action . configToTriples
+    where
+      action :: (ConfigAction, Text, Text) -> [Text]
+      action (act, check, scope) =
+            prettyConfigAction act
+          :  [ "    " <> check | check /= ""]
+          ++ [ "    " <> scope | scope /= ""]
